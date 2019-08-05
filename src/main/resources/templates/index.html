@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Index Page</title>
 </head>
 <body>
 
-<h2>Index Page</h2>
+<div th:switch="${profile}">
+  <div th:case="'dev1'">
+    <h2>Index Page - 8080</h2>
+    <a href="http://localhost:8081/">Move to dev2 application on port 8081</a>
+  </div>
+  <div th:case="'dev2'">
+    <h2>Index Page - 8081</h2>
+    <a href="http://localhost:8080/">Move to dev1 application on port 8080</a>
+  </div>
+</div>
+<a href="/welcome">Welcome Page</a>
 </body>
 </html>
