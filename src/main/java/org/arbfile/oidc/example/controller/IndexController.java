@@ -30,11 +30,12 @@ public class IndexController
         else
         {
             logger.info(principal.toString());
+            logger.info("principal.getName() = " + principal.getName());
             if ( principal instanceof OAuth2AuthenticationToken)
             {
                 OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) principal;
                 OAuth2User user = authentication.getPrincipal();
-                logger.info("username = " + user.getAttributes().get("preferred_username"));
+                logger.info("preferred_username = " + user.getAttributes().get("preferred_username"));
             }
         }
         model.addAttribute("profile", this.environment.getActiveProfiles()[0]);
