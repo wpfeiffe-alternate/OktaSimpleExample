@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 @Injectable({
@@ -10,6 +10,6 @@ export class UserService {
 
   getUsers() {
     const url = 'http://localhost:8080/api/users';
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, {withCredentials: true});
   }
 }

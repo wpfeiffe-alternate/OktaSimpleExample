@@ -1,43 +1,34 @@
 package org.arbfile.oidc.example.controller;
 
+import org.arbfile.oidc.example.dto.AuthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-@Controller
+@RestController
+@RequestMapping("/api")
 public class AuthController
 {
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    @GetMapping("/nglogin")
+    @GetMapping("/isauthenticated")
     @CrossOrigin("http://localhost:4200")
-    public RedirectView login(HttpServletRequest request, HttpServletResponse response, HttpSession session, RedirectAttributes redirAttr)
+    public AuthUser isAuthenticated()
     {
-        if (response != null)
+        AuthUser authUser = new AuthUser("");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null)
         {
-            logger.info("response successfully injected");
+            Object p = authentication.getPrincipal();
+            logger.info("Principal class name = " + p.getClass());
+            authUser = new AuthUser("jkennedy");
         }
-        if (session != null)
-        {
-            logger.info("session successfully injected");
-        }
-        Cookie[] cookies = request.getCookies();
-        for (Cookie c: cookies)
-        {
-            logger.info(c.getName() + ":" + c.getValue());
-        }
-        redirAttr.addAttribute("loginParam", "test");
-        response.addHeader("loginid", "jkennedy");
-        return new RedirectView("http://localhost:4200/");
+        return authUser;
     }
 
 }

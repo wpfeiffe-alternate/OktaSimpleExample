@@ -1,5 +1,6 @@
 package org.arbfile.oidc.example.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .oauth2Login()
             .and()
             .oauth2Client();
-        //http.csrf().disable();
+        http.csrf().disable();
     }
 
     /*
@@ -30,5 +31,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 			.formLogin().and()
 			.httpBasic();
      */
+    @Bean
+    AllowAllCorsFilter corsFilter()
+    {
+        AllowAllCorsFilter filter = new AllowAllCorsFilter();
+        return filter;
+    }
 
 }
