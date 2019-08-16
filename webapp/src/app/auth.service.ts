@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private httpClient: HttpClient) { }
 
   isAuthenticated(): Observable<AuthUser> {
-    return this.httpClient.get<AuthUser>('http://localhost:8080/api/isauthenticated', {withCredentials: true});
+    return this.httpClient.get<AuthUser>('http://localhost:8080/api/isauthenticated');
     //return of(new AuthUser('fakeone'));
   }
 }
