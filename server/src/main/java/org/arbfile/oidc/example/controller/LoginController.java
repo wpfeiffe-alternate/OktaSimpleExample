@@ -50,7 +50,7 @@ public class LoginController
         //redirAttr.addAttribute("loginParam", "test");
         // add additional header during redirect - not necessary in this case
         //response.addHeader("loginid", "jkennedy");
-        return new RedirectView("http://localhost:4200/");
+        return new RedirectView("http://localhost:4200/"); // TODO: define in YML
     }
 
 }

@@ -1,2 +1,5 @@
 server:
+  servlet:
+    session:
+      timeout: 15m
   port: 8081
