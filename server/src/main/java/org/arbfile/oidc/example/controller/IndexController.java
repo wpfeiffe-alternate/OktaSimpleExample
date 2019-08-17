@@ -20,7 +20,8 @@ public class IndexController
     @Autowired
     private Environment environment;
 
-    @RequestMapping({"/", "/index"})
+//    @RequestMapping({"/", "/index"})
+    @RequestMapping("/index_orig")
     public String index(Principal principal, Model model)
     {
         if (principal == null)
@@ -39,7 +40,7 @@ public class IndexController
             }
         }
         model.addAttribute("profile", this.environment.getActiveProfiles()[0]);
-        return "index";
+        return "index_orig";
     }
 
     @RequestMapping({"/welcome"})
