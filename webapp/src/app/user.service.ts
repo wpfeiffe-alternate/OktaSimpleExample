@@ -10,6 +10,6 @@ export class UserService {
 
   getUsers() {
     const url = 'http://localhost:8080/api/users';
-    return this.httpClient.get(url, {withCredentials: true});
+    return this.httpClient.get(url);
   }
 }

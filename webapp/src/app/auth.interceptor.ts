@@ -2,18 +2,16 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
-// TODO: use this for withCredentials, doing this is cleaner
 export class AuthInterceptor implements HttpInterceptor {
+
+  // include withCredentials in every request
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    req = req.clone({withCredentials: true});
     return next.handle(req).pipe(
       tap(
         (event: HttpEvent<any>) => {
           if (event instanceof HttpResponse) {
             console.log('status = ' + event.status);
-            const headerkeys: string [] = event.headers.keys();
-            headerkeys.forEach( item => {
-              console.log('header item: ' + item);
-            });
           }
         }
       )

@@ -18,6 +18,16 @@ public class LoginController
 {
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+    /**
+     * Handles Angular login.  This link is under security and can be redirected to from
+     * an Angular application.
+     * @param request needed to display cookies for debugging purposes.
+     * @param response not used currently.
+     * @param session not used currently.
+     * @param redirAttr used to build a redirect request.  Not used.
+     * @return an object that represents a view that redirects to an absolute,
+     * context relative, or current request relative URL.
+     */
     @GetMapping("/nglogin")
     @CrossOrigin("http://localhost:4200")
     public RedirectView login(HttpServletRequest request, HttpServletResponse response, HttpSession session, RedirectAttributes redirAttr)
@@ -31,13 +41,21 @@ public class LoginController
             logger.info("session successfully injected");
         }
         Cookie[] cookies = request.getCookies();
+        logger.info("All Cookies:");
         for (Cookie c: cookies)
         {
-            logger.info(c.getName() + ":" + c.getValue());
+            logger.info("\t" + c.getName() + ":" + c.getValue());
         }
-        redirAttr.addAttribute("loginParam", "test");
-        response.addHeader("loginid", "jkennedy");
-        return new RedirectView("http://localhost:4200/");
+        // the below code will add query params to the redirect url
+        //redirAttr.addAttribute("loginParam", "test");
+        // add additional header during redirect - not necessary in this case
+        //response.addHeader("loginid", "jkennedy");
+        return new RedirectView("http://localhost:4200/"); // TODO: define in YML
     }
 
 }
+
+// Notes:
+// interesting SO post sending cookies back with redirect
+// https://stackoverflow.com/questions/4694089/sending-browser-cookies-during-a-302-redirect
+
