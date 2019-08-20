@@ -1,0 +1,1 @@
+java -DproxySet=true -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=8888 -Djavax.net.ssl.trustStore=.\fiddler\FiddlerKeystore -Djavax.net.ssl.trustStorePassword=Fiddler -jar server\build\libs\server.jar --spring.profiles.active=prod

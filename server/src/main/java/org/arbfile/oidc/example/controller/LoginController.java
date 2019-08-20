@@ -1,7 +1,9 @@
 package org.arbfile.oidc.example.controller;
 
+import org.arbfile.oidc.example.configuration.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,14 @@ import javax.servlet.http.HttpSession;
 public class LoginController
 {
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private ApplicationProperties properties;
+    private Environment environment;
+
+    public LoginController(ApplicationProperties properties, Environment environment)
+    {
+        this.properties = properties;
+        this.environment = environment;
+    }
 
     /**
      * Handles Angular login.  This link is under security and can be redirected to from
@@ -46,11 +56,10 @@ public class LoginController
         {
             logger.info("\t" + c.getName() + ":" + c.getValue());
         }
+        logger.info("active profile = " + environment.getActiveProfiles()[0]);
         // the below code will add query params to the redirect url
         //redirAttr.addAttribute("loginParam", "test");
-        // add additional header during redirect - not necessary in this case
-        //response.addHeader("loginid", "jkennedy");
-        return new RedirectView("http://localhost:4200/"); // TODO: define in YML
+        return new RedirectView(this.properties.getPostauthredirect());
     }
 
 }
@@ -59,3 +68,5 @@ public class LoginController
 // interesting SO post sending cookies back with redirect
 // https://stackoverflow.com/questions/4694089/sending-browser-cookies-during-a-302-redirect
 
+// get the active profile
+// https://stackoverflow.com/questions/9267799/how-do-you-get-current-active-default-environment-profile-programmatically-in-sp

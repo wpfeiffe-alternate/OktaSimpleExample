@@ -1,0 +1,11 @@
+# Use this profile when Angular is running on port 4200 and the server is running on 8080
+# The timeout is set intentionally low for testing
+server:
+  servlet:
+    session:
+
+      timeout: 15m
+  port: 8080
+
+application:
+  postauthredirect: http://localhost:4200/
