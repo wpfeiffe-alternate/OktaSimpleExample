@@ -1,5 +1,6 @@
 package org.arbfile.oidc.example.configuration;
 
+import org.arbfile.oidc.example.oauth.CustomOauthLoginFailureHandler;
 import org.arbfile.oidc.example.oauth.CustomOauthLoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,13 +20,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .and()
             .oauth2Login()
             .successHandler(customOauthLoginSuccessHandler())
+            .failureHandler(customOauthLoginFailureHandler())
             .and()
             .oauth2Client();
         http.csrf().disable();
-    }
 
-    /*
-    default from Spring
+        /*
+        default auto-config from Spring
     		http
 			.authorizeRequests()
 				.anyRequest().authenticated()
@@ -33,6 +34,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 			.formLogin().and()
 			.httpBasic();
      */
+
+    }
+
     @Bean
     AllowAllCorsFilter corsFilter()
     {
@@ -45,6 +49,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     {
         CustomOauthLoginSuccessHandler handler = new CustomOauthLoginSuccessHandler();
         // handler.setDefaultTargetUrl("/"); TODO: may need to do this like SAML
+        return handler;
+    }
+
+    @Bean
+    public CustomOauthLoginFailureHandler customOauthLoginFailureHandler()
+    {
+        CustomOauthLoginFailureHandler handler = new CustomOauthLoginFailureHandler();
+        handler.setUseForward(true);
+        handler.setDefaultFailureUrl("/oautherror");// default if not handled by CustomOauthLoginFailureHandler
         return handler;
     }
 }
