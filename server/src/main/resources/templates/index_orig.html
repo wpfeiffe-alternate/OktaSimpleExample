@@ -15,7 +15,13 @@
     <h2>Index Page - 8081</h2>
     <a href="http://localhost:8080/">Move to dev1 application on port 8080</a>
   </div>
+  <div th:case="'prod'">
+    <h2>Index Page (secured) running on 8080</h2>
+  </div>
+  <div th:case="'dev'">
+    <h2>Index Page running on 8080, Angular running on 4200</h2>
+  </div>
 </div>
-<a href="/welcome">Welcome Page</a>
+<a href="/welcome">Welcome Page (secured)</a>
 </body>
 </html>
