@@ -1,5 +1,6 @@
 package org.arbfile.oidc.example.configuration;
 
+import org.arbfile.oidc.example.oauth.CustomOauthLoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .anyRequest().authenticated()
             .and()
             .oauth2Login()
+            .successHandler(customOauthLoginSuccessHandler())
             .and()
             .oauth2Client();
         http.csrf().disable();
@@ -38,4 +40,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         return filter;
     }
 
+    @Bean
+    public CustomOauthLoginSuccessHandler customOauthLoginSuccessHandler()
+    {
+        CustomOauthLoginSuccessHandler handler = new CustomOauthLoginSuccessHandler();
+        // handler.setDefaultTargetUrl("/"); TODO: may need to do this like SAML
+        return handler;
+    }
 }
