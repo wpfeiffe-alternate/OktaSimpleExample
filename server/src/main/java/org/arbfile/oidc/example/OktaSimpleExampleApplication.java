@@ -21,7 +21,7 @@ public class OktaSimpleExampleApplication
     public CommandLineRunner generateData()
     {
         return (args) -> {
-            logger.info("---------------------START FIDDLER-------------------------");
+            logger.info("---------------------REMINDER: START FIDDLER-------------------------");
         };
     }
 
