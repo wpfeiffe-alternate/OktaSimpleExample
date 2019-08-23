@@ -27,9 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .oidcUserService(this.oidcUserService())
             .and()
             .successHandler(customOauthLoginSuccessHandler())
-            .failureHandler(customOauthLoginFailureHandler());
-//            .and()
-//            .oauth2Client();
+            .failureHandler(customOauthLoginFailureHandler())
+            .and()
+            .oauth2Client();
         http.csrf().disable();
 
         /*
