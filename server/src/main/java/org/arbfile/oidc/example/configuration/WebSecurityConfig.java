@@ -2,10 +2,14 @@ package org.arbfile.oidc.example.configuration;
 
 import org.arbfile.oidc.example.oauth.CustomOauthLoginFailureHandler;
 import org.arbfile.oidc.example.oauth.CustomOauthLoginSuccessHandler;
+import org.arbfile.oidc.example.oauth.CustomOidcUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
@@ -19,10 +23,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .anyRequest().authenticated()
             .and()
             .oauth2Login()
-            .successHandler(customOauthLoginSuccessHandler())
-            .failureHandler(customOauthLoginFailureHandler())
+            .userInfoEndpoint()
+            .oidcUserService(this.oidcUserService())
             .and()
-            .oauth2Client();
+            .successHandler(customOauthLoginSuccessHandler())
+            .failureHandler(customOauthLoginFailureHandler());
+//            .and()
+//            .oauth2Client();
         http.csrf().disable();
 
         /*
@@ -60,4 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         handler.setDefaultFailureUrl("/oautherror");// default if not handled by CustomOauthLoginFailureHandler
         return handler;
     }
+
+    @Bean
+    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        return new CustomOidcUserService();
+    }
+
 }
