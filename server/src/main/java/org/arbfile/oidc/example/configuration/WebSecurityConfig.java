@@ -2,18 +2,21 @@ package org.arbfile.oidc.example.configuration;
 
 import org.arbfile.oidc.example.oauth.CustomOauthLoginFailureHandler;
 import org.arbfile.oidc.example.oauth.CustomOauthLoginSuccessHandler;
-import org.arbfile.oidc.example.oauth.CustomOidcUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
+    @Autowired
+    private CustomAuthenticationProvider customAuthenticationProvider;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
@@ -23,13 +26,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .anyRequest().authenticated()
             .and()
             .oauth2Login()
-            .userInfoEndpoint()
-            .oidcUserService(this.oidcUserService())
-            .and()
+//            .userInfoEndpoint() // this did not work
+//            .oidcUserService(this.oidcUserService()) // this did not work
+//            .and()
             .successHandler(customOauthLoginSuccessHandler())
             .failureHandler(customOauthLoginFailureHandler())
             .and()
             .oauth2Client();
+            //.and().authenticationProvider(customAuthenticationProvider);
         http.csrf().disable();
 
         /*
@@ -41,8 +45,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 			.formLogin().and()
 			.httpBasic();
      */
-
     }
+
+    // // this is not working, I am unable to add an AuthenticationProvider to the Auth Flow.
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(customAuthenticationProvider);
+    }
+
+    // This is an alternate method I tried but did not work either
+//    @Autowired
+//    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception
+//    {
+//        auth.authenticationProvider(customAuthenticationProvider);
+//    }
 
     @Bean
     AllowAllCorsFilter corsFilter()
@@ -68,9 +84,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
         return handler;
     }
 
-    @Bean
-    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
-        return new CustomOidcUserService();
-    }
+//    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+//        return new CustomOidcUserService();
+//    }
 
 }
