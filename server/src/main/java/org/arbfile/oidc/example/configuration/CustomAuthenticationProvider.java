@@ -6,15 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.authentication.OAuth2LoginAuthenticationToken;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.stereotype.Component;
 
-@Component
 public class CustomAuthenticationProvider implements AuthenticationProvider
 {
     private Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
     private CustomOidcUserService customOidcUserService;
+
+    public CustomAuthenticationProvider() {}
 
     public CustomAuthenticationProvider(CustomOidcUserService customOidcUserService)
     {
@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider
         {
             logger.info("principal is instanceof DefaultOidcUser");
             DefaultOidcUser authToken = (DefaultOidcUser) user;
-            this.customOidcUserService.loadUserByUsername(authToken.getClaims().get("preferred_username").toString());
+            this.customOidcUserService.loadUser(new OidcUserRequest(null, null, null));
         }
 
         return authentication;
@@ -39,6 +39,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider
     @Override
     public boolean supports(Class<?> authentication)
     {
-        return OAuth2LoginAuthenticationToken.class.isAssignableFrom(authentication);
+        return true;
     }
 }
