@@ -2,20 +2,17 @@ package org.arbfile.oidc.example.configuration;
 
 import org.arbfile.oidc.example.oauth.CustomOauthLoginFailureHandler;
 import org.arbfile.oidc.example.oauth.CustomOauthLoginSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.arbfile.oidc.example.oauth.CustomOidcUserService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
-    @Autowired
-    private CustomAuthenticationProvider customAuthenticationProvider;
+//    @Autowired
+//    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
@@ -26,14 +23,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .anyRequest().authenticated()
             .and()
             .oauth2Login()
-//            .userInfoEndpoint() // this did not work
-//            .oidcUserService(this.oidcUserService()) // this did not work
-//            .and()
+            .userInfoEndpoint()
+            .oidcUserService(this.customOidcUserService())
+            .and()
             .successHandler(customOauthLoginSuccessHandler())
             .failureHandler(customOauthLoginFailureHandler())
+//            .and()
+            //.authenticationDetailsSource()
             .and()
             .oauth2Client();
-            //.and().authenticationProvider(customAuthenticationProvider);
+
         http.csrf().disable();
 
         /*
@@ -47,11 +46,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
      */
     }
 
-    // // this is not working, I am unable to add an AuthenticationProvider to the Auth Flow.
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(customAuthenticationProvider);
+    public CustomOidcUserService customOidcUserService()
+    {
+        return new CustomOidcUserService();
     }
+
+//    @Bean
+//    public CustomAuthenticationProvider customAuthenticationProvider()
+//    {
+//        return new CustomAuthenticationProvider();
+//    }
+
+     // this is not working, I am unable to add an AuthenticationProvider to the Auth Flow.
+//    @Override
+//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService()
+//        auth.authenticationProvider(customAuthenticationProvider);
+//    }
 
     // This is an alternate method I tried but did not work either
 //    @Autowired
