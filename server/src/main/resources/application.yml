@@ -1,5 +1,11 @@
-okta:
-  oauth2:
-    issuer: https://arbfile.okta.com/oauth2/default
-    client-id: 0oa11m0ttknCPGxMJ357
-    client-secret: TGnynQFF8F5ePXyTfDd9ZN_eCgBIILACngE4-Q3H
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          okta:
+            issuer-uri: https://arbfile.okta.com/oauth2/default
+        registration:
+          okta:
+            client-id: 0oa11m0ttknCPGxMJ357
+            client-secret: TGnynQFF8F5ePXyTfDd9ZN_eCgBIILACngE4-Q3H

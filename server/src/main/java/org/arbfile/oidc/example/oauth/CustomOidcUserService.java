@@ -1,5 +1,6 @@
 package org.arbfile.oidc.example.oauth;
 
+import org.arbfile.oidc.example.dto.SecurityUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -20,7 +21,13 @@ public class CustomOidcUserService extends OidcUserService
     {
         OidcUser user = super.loadUser(userRequest);
         logger.info("CustomOidcUserService user = " + user.getPreferredUsername());
-        return user;
+        SecurityUser securityUser = new SecurityUser();
+        securityUser.setAutoLogin(true);
+        securityUser.setInternalIdpUser(false);
+        securityUser.getPrivileges().add("CUSTOMER_USER");
+        CustomOidcUser customOidcUser = new CustomOidcUser(user);
+        customOidcUser.setCustomUserDetails(securityUser);
+        return customOidcUser;
     }
 
 }

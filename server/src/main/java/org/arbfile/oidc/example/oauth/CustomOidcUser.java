@@ -5,6 +5,7 @@ import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.Collection;
 
@@ -36,7 +37,7 @@ public class CustomOidcUser extends DefaultOidcUser
         super(authorities, idToken, userInfo, nameAttributeKey);
     }
 
-    public CustomOidcUser(DefaultOidcUser defaultOidcUser)
+    public CustomOidcUser(OidcUser defaultOidcUser)
     {
         super(defaultOidcUser.getAuthorities(), defaultOidcUser.getIdToken(), defaultOidcUser.getUserInfo(), IdTokenClaimNames.SUB );
     }
